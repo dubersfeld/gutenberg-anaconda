@@ -163,8 +163,6 @@ public class UserRestEndpointTest {
 
 		MyUser checkUser = toUser(result.getResponse().getContentAsString(StandardCharsets.UTF_8));	
 	
-		System.err.println("Fucking mainPayment " + checkUser.getMainPayMeth());
-		
 		assertEquals(checkUser.getMainPayMeth(), 1);
 		
 	}
