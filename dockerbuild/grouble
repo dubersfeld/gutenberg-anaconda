@@ -1,0 +1,21 @@
+#!/bin/bash
+
+pwd
+
+for f in 'config';
+do 
+   echo ${f}
+   cd $f
+   pwd
+   echo "./build"
+   ./build
+   cd ..
+
+   echo $?
+   if [ "$?" -ne 0 ]
+   then 
+      echo "Build failed for $f"
+      exit "$?"
+   fi   
+
+done;

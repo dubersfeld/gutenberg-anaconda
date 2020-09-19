@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Create a named volume
+
+docker rm -f books_create
+

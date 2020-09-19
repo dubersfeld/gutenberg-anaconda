@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" 
+		xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/header::header(title='error')">
+</head>
+
+<body>
+      
+	<h1>
+    <span th:text="'An unexpected error happened'"></span>
+  	</h1>
+
+    <br /><br />
+    <div th:replace="fragments/footer::footer"></div>
+    
+        
+</body>
+</html>

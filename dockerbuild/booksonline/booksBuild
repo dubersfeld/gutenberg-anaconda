@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Build MongoDB image gutenberg/books-mongodb with JS file
+
+docker build -t gutenberg/books-mongodb .

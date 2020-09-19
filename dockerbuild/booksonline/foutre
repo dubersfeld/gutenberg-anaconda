@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Create a named volume
+
+# from image gutenberg/books-mongodb to volume books-mongodb
+
+docker rm -f books_create
+
+docker run --name books_create -d --rm --mount source=gutenberg-books-db,target=/data/db \
+--env MONGO_INITDB_ROOT_USERNAME=root --env MONGO_INITDB_ROOT_PASSWORD=root -p 27017:27017 mongo
+
+

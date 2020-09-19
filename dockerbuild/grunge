@@ -1,0 +1,26 @@
+#!/bin/bash
+
+pwd
+
+for server in 'frontend-server';
+do 
+    echo ${server}
+    pwd
+    cd booksonline
+    pwd
+    echo "./bookRestore"
+    ./booksRestore
+    cd ../../$server
+    pwd
+    echo "./build"
+    ./build
+    cd ../dockerbuild
+
+    echo $?
+    if [ "$?" -ne 0 ]
+    then 
+      echo "Build failed for $server"
+      exit "$?"
+    fi  
+
+done;

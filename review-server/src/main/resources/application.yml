@@ -1,0 +1,11 @@
+server:
+  port: 8082
+  servlet:
+    context-path:
+    
+spring:
+  data:
+    mongodb:
+      uri: mongodb://spring:password1234@localhost:27017/booksonline
+     
+baseReviewsUrl: http://localhost:8082          

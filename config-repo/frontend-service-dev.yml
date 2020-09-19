@@ -1,0 +1,24 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /gutenberg
+
+              
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKASERVER_URI}
+
+
+# base server URLs 
+#baseBooksUrl: http://gateway-service:5555/books
+baseBooksUrl: ${BASE_BOOKS_URL}
+baseReviewsUrl: ${BASE_REVIEWS-URL}
+baseOrdersUrl: ${BASE_ORDERS_URL}
+baseUsersUrl: ${BASE_USERS_URL}
+
+

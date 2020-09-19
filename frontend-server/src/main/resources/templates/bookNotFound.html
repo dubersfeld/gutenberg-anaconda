@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" 
+		xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/header::header(title='bookNotFound')">
+</head>
+
+<body>
+      
+	<h1>
+    <span th:text="'Book not found'"></span>
+  	</h1>
+
+    <br /><br />
+    <div th:replace="fragments/footer::footer"></div>
+    
+        
+</body>
+</html>

@@ -1,0 +1,196 @@
+version: '3.4'
+
+services:
+
+  # rabbitmq-server
+  rabbitmq-server:
+    image: rabbitmq:3-management
+    hostname: "my-rabbit"
+    ports:
+      # host:container
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - type: volume
+        source: rabbitmqdb
+        target: /var/lib/rabbitmq 
+
+  # gutenberg-config 
+  gutenberg-config:
+    image:
+      gutenberg/config-server
+    volumes:
+      # edit to match your own filesystem
+      - type: bind
+        source: /home/ubersfeld/Documents/gutenberg-compass/config-repo
+        target: /tmp/config-repo
+    ports:
+      - 8888:8888
+
+  # gutenberg-eureka 
+  gutenberg-eureka:
+    image:
+      gutenberg/eureka-server
+    ports:
+      # host:container
+      - 8761:8761
+
+  # books-mongodb 
+  books-mongodb:
+    image: mongo
+    volumes:
+      - type: volume
+        source: booksdb
+        target: /data/db 
+    # Note mongod not mongo because we start a server not a client      
+    command: mongod --smallfiles --auth
+    ports:
+      # Note the syntax host:container
+      - 28017:27017
+    restart: always
+
+  # book-service
+  book-service:
+    image: gutenberg/book-server
+    depends_on:
+      - gutenberg-config
+      - books-mongodb
+    ports:
+      - 8081:8081
+
+    environment:
+      - CONFIGSERVER_HOST=gutenberg-config
+      - CONFIGSERVER_PORT=8888
+      - GUTENBERG_CONFIG_URI=http://gutenberg-config:8888
+      - PROFILE=dev
+
+  # review-service
+  review-service:
+    image: gutenberg/review-server
+    depends_on:
+      - gutenberg-config
+      - books-mongodb
+    ports:
+      # host:container
+      - 8082:8082
+
+    environment:
+      - CONFIGSERVER_HOST=gutenberg-config
+      - CONFIGSERVER_PORT=8888
+      - GUTENBERG_CONFIG_URI=http://gutenberg-config:8888
+      - PROFILE=dev
+
+  # order-service
+  order-service:
+    image: gutenberg/order-server
+    depends_on:
+      - gutenberg-config
+      - books-mongodb
+      - book-service
+    ports:
+      # host:container
+      - 8083:8083
+
+    environment:
+      - CONFIGSERVER_HOST=gutenberg-config
+      - CONFIGSERVER_PORT=8888
+      - BOOKSERVER_HOST=book-service
+      - BOOKSERVER_PORT=8081
+      - GUTENBERG_CONFIG_URI=http://gutenberg-config:8888
+      - PROFILE=dev
+
+  # user-service
+  user-service:
+    image: gutenberg/user-server
+    depends_on:
+      - gutenberg-config
+      - books-mongodb
+    ports:
+      # host:container
+      - 8084:8084
+
+    environment:
+      - CONFIGSERVER_HOST=gutenberg-config
+      - CONFIGSERVER_PORT=8888
+      - MONGODBSERVER_HOST=books-mongodb
+      - MONGODBSERVER_PORT=27017
+      - GUTENBERG_CONFIG_URI=http://gutenberg-config:8888
+      - PROFILE=dev
+
+  # zuul-service
+  zuul-service:
+    image: gutenberg/zuul-server
+    depends_on:
+      - gutenberg-config
+      - books-mongodb
+    ports:
+      # host:container
+      - 5555:5555
+
+    environment:
+      - CONFIGSERVER_HOST=gutenberg-config
+      - CONFIGSERVER_PORT=8888
+      - GUTENBERG_CONFIG_URI=http://gutenberg-config:8888
+      - PROFILE=dev
+
+  # redis-service
+  redis-service:
+    image: redis
+    #ports:
+    #  # host:container
+    #  - 6379:6379
+
+  # frontend-service
+  frontend-service:
+    image: gutenberg/frontend-server
+    depends_on:
+      - gutenberg-config
+      - book-service
+      - review-service
+      - order-service
+      - user-service
+      - zuul-service
+    ports:
+      # host:container
+      - 8080:8080
+    environment:
+      - CONFIGSERVER_HOST=gutenberg-config
+      - CONFIGSERVER_PORT=8888
+      - BOOKSERVER_HOST=book-service
+      - BOOKSERVER_PORT=8081
+      - REVIEWSERVER_HOST=review-service
+      - REVIEWSERVER_PORT=8082
+      - ORDERSERVER_HOST=order-service
+      - ORDERSERVER_PORT=8083
+      - USERSERVER_HOST=user-service
+      - USERSERVER_PORT=8084
+      - GUTENBERG_CONFIG_URI=http://gutenberg-config:8888
+      - PROFILE=dev
+
+  # admin-service
+  admin-service:
+    image: gutenberg/admin-server
+    depends_on:
+      - gutenberg-config
+      - books-mongodb
+    ports:
+      # host:container
+      - 9090:9090
+    environment:
+      - CONFIGSERVER_HOST=gutenberg-config
+      - CONFIGSERVER_PORT=8888
+      - BOOKSERVER_HOST=book-service
+      - BOOKSERVER_PORT=8081
+      - ORDERSERVER_HOST=order-service
+      - ORDERSERVER_PORT=8083
+      - GUTENBERG_CONFIG_URI=http://gutenberg-config:8888
+      - PROFILE=dev
+
+
+volumes:
+  booksdb:
+    external: 
+      name: gutenberg-books-db
+  rabbitmqdb:
+    external: 
+      name: gutenberg-rabbitmq-db

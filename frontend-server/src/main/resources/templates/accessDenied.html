@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" 
+		xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/header::header(title='error')">
+</head>
+
+<body>
+      
+	<nav th:replace="fragments/header::language"></nav>
+	
+	<h1>
+    <span th:text="'Access denied'"></span>
+  	</h1>
+
+    <br /><br />
+    <div th:replace="fragments/footer::footer"></div>
+    
+        
+</body>
+</html>

@@ -1,0 +1,49 @@
+server:
+  port: 5555
+  
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKASERVER_URI}
+
+spring:
+  cloud:
+    config:
+      uri : ${GUTENBERG_CONFIG_URI}
+  
+    gateway:
+      routes:
+      - id: books
+        uri: ${BOOKSERVER_URI}
+        predicates:
+        - Path=/books/**
+        filters:
+        - StripPrefix=1 
+      - id: users
+        uri: ${USERSERVER_URI}
+        predicates:
+        - Path=/users/**
+        filters:
+        - StripPrefix=1 
+      - id: orders
+        uri: ${ORDERSERVER_URI}
+        predicates:
+        - Path=/orders/**
+        filters:
+        - StripPrefix=1 
+      - id: reviews
+        uri: ${REVIEWSERVER_URI}
+        predicates:
+        - Path=/reviews/**
+        filters:
+        - StripPrefix=1 
+        
+      httpclient:
+        connect-timeout: 10000
+        response-timeout: 10s
+        
+        

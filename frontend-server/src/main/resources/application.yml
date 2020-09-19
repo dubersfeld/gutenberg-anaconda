@@ -1,0 +1,20 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /gutenberg
+
+spring:
+  # Redis server
+  redis:
+    host: localhost
+    port: "6379"
+
+# base server URLs 
+baseBooksUrl: http://localhost:5555/books
+baseReviewsUrl: http://localhost:5555/reviews
+baseOrdersUrl: http://localhost:5555/orders
+baseUsersUrl: http://localhost:5555/users
+#baseBooksUrl: http://localhost:8081
+#baseReviewsUrl: http://localhost:8082
+#baseOrdersUrl: http://localhost:8083
+#baseUsersUrl: http://localhost:8084

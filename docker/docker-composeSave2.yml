@@ -1,0 +1,177 @@
+version: '3.4'
+
+services:
+
+  # books-mongodb 
+  mongodb-books:
+    image: mongo
+    # for testing only
+    #image: gutenberg/books-mongodb
+    volumes:
+      - type: volume
+        source: booksdb
+        target: /data/db 
+    # Note mongod not mongo because we start a server not a client      
+    command: mongod --auth
+    ports:
+      # Note the syntax host:container
+      - 28017:27017
+    restart: always
+
+ 
+  # gutenberg-config 
+  config-server:
+    image:
+      gutenberg/config-server
+    volumes:
+      # edit to match your own filesystem
+      - type: bind
+        source: /home/dominique/Documents/workspace-anaconda-3/config-repo
+        target: /tmp/config-repo
+    ports:
+      - 8888:8888
+    environment:
+      - EUREKASERVER_URI=http://eureka-server:8761/eureka/
+      - EUREKASERVER_HOST=eureka-server
+      - EUREKASERVER_PORT=8761
+
+  # gutenberg-eureka 
+  eureka-server:
+    image:
+      gutenberg/eureka-server
+    ports:
+      # host:container
+      - 8761:8761
+
+  # book-service
+  book-service:
+    image: gutenberg/book-server
+    depends_on:
+      - config-server
+      - mongodb-books
+    ports:
+      - 8081:8081
+
+    environment:
+      - CONFIGSERVER_HOST=config-server
+      - CONFIGSERVER_PORT=8888
+      - GUTENBERG_CONFIG_URI=http://config-server:8888
+      - PROFILE=dev
+
+  # review-service
+  review-service:
+    image: gutenberg/review-server
+    depends_on:
+      - config-server
+      - mongodb-books
+    ports:
+      # host:container
+      - 8082:8082
+
+    environment:
+      - CONFIGSERVER_HOST=config-server
+      - CONFIGSERVER_PORT=8888
+      - GUTENBERG_CONFIG_URI=http://config-server:8888
+      - PROFILE=dev
+
+  # order-service
+  order-service:
+    image: gutenberg/order-server
+    depends_on:
+      - config-server
+      - mongodb-books
+      - book-service
+    ports:
+      # host:container
+      - 8083:8083
+
+    environment:
+      - CONFIGSERVER_HOST=config-server
+      - CONFIGSERVER_PORT=8888
+      - GUTENBERG_CONFIG_URI=http://config-server:8888
+      - PROFILE=dev
+
+  # user-service
+  user-service:
+    image: gutenberg/user-server
+    depends_on:
+      - config-server
+      - mongodb-books
+    ports:
+      # host:container
+      - 8084:8084
+
+    environment:
+      - CONFIGSERVER_HOST=config-server
+      - CONFIGSERVER_PORT=8888
+      - GUTENBERG_CONFIG_URI=http://config-server:8888
+      - PROFILE=dev
+
+  # gateway-service
+  gateway-service:
+    image: gutenberg/gateway-server
+    depends_on:
+      - config-server
+      - mongodb-books
+    ports:
+      # host:container
+      - 5555:5555
+
+    environment:
+      - BOOKSERVER_URI=http://book-service:8081
+      - BOOKSERVER_HOST=book-service
+      - BOOKSERVER_PORT=8081
+      - REVIEWSERVER_URI=http://review-service:8082
+      - REVIEWSERVER_HOST=review-service
+      - REVIEWSERVER_PORT=8082
+      - ORDERSERVER_URI=http://order-service:8083
+      - ORDERSERVER_HOST=order-service
+      - ORDERSERVER_PORT=8083
+      - USERSERVER_URI=http://user-service:8084
+      - USERSERVER_HOST=user-service
+      - USERSERVER_PORT=8084
+      - EUREKASERVER_URI=http://eureka-server:8761/eureka/     
+      - CONFIGSERVER_HOST=config-server
+      - CONFIGSERVER_PORT=8888
+      - GUTENBERG_CONFIG_URI=http://config-server:8888
+      - PROFILE=dev    
+
+  # frontend-service
+  frontend-service:
+    image: gutenberg/frontend-server
+    depends_on:
+      - config-server
+      - book-service
+      - review-service
+      - order-service
+      - user-service
+      - gateway-service
+    ports:
+      # host:container
+      - 8080:8080
+    environment:
+      - CONFIGSERVER_HOST=config-server
+      - CONFIGSERVER_PORT=8888
+      # some en are unuesed
+      - BOOKSERVER_HOST=book-service
+      - BOOKSERVER_PORT=8081
+      - REVIEWSERVER_HOST=review-service
+      - REVIEWSERVER_PORT=8082
+      - ORDERSERVER_HOST=order-service
+      - ORDERSERVER_PORT=8083
+      - USERSERVER_HOST=user-service
+      - USERSERVER_PORT=8084
+      - GATEWAYSERVER_HOST=gateway-service
+      - GATEWAYSERVER_PORT=5555
+      - GUTENBERG_CONFIG_URI=http://config-server:8888
+      - BASE_BOOKS_URL=http://gateway-service:5555/books
+      - BASE_REVIEWS_URL=http://gateway-service:5555/reviews
+      - BASE_ORDERS_URL=http://gateway-service:5555/orders
+      - BASE_USERS_URL=http://gateway-service:5555/users
+      - PROFILE=dev  
+
+volumes:
+  booksdb:
+    external: 
+      name: gutenberg-books-db
+

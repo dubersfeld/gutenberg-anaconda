@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: user-service
+  profiles:
+    active:
+      dev
+      
+  cloud:
+    config:
+      uri: ${GUTENBERG_CONFIG_URI}

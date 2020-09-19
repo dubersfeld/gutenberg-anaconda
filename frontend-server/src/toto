@@ -1,0 +1,41 @@
+main/java/com/dub/spring/controller/orders/OrderController.java:import javax.servlet.http.HttpSession;
+main/java/com/dub/spring/controller/orders/OrderController.java:			HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/orders/OrderController.java:			HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/orders/OrderController.java:			HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/orders/OrderController.java:			HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/orders/OrderController.java:				HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/users/UserController.java:import javax.servlet.http.HttpSession;
+main/java/com/dub/spring/controller/users/UserController.java:		HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/users/UserController.java:			HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/users/UserController.java:		HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/users/UserController.java:			HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/users/UserController.java:		HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/users/UserController.java:		HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/users/UserController.java:		HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/users/UserController.java:		HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/users/UserController.java:		HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/books/BookController.java:import javax.servlet.http.HttpSession;
+main/java/com/dub/spring/controller/books/BookController.java:		HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/books/BookController.java:		HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/DefaultController.java:import javax.servlet.http.HttpSession;
+main/java/com/dub/spring/controller/DefaultController.java:		HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/utils/OrderUtils.java:import javax.servlet.http.HttpSession;
+main/java/com/dub/spring/controller/utils/OrderUtils.java:	public String getActiveOrderId(HttpSession session);
+main/java/com/dub/spring/controller/utils/OrderUtils.java:	public void invalidActiveOrderId(HttpSession session);
+main/java/com/dub/spring/controller/utils/UserUtilsImpl.java:import javax.servlet.http.HttpSession;
+main/java/com/dub/spring/controller/utils/UserUtilsImpl.java:	public MyUser getLoggedUser(HttpSession session) {
+main/java/com/dub/spring/controller/utils/UserUtilsImpl.java:	public MyUser reload(HttpSession session) {
+main/java/com/dub/spring/controller/utils/UserUtilsImpl.java:	public void setLoggedUser(HttpSession session, MyUser user) {
+main/java/com/dub/spring/controller/utils/OrderUtilsImpl.java:import javax.servlet.http.HttpSession;
+main/java/com/dub/spring/controller/utils/OrderUtilsImpl.java:	public String getActiveOrderId(HttpSession session) {
+main/java/com/dub/spring/controller/utils/OrderUtilsImpl.java:	public void invalidActiveOrderId(HttpSession session) {
+main/java/com/dub/spring/controller/utils/UserUtils.java:import javax.servlet.http.HttpSession;
+main/java/com/dub/spring/controller/utils/UserUtils.java:	public MyUser getLoggedUser(HttpSession session);
+main/java/com/dub/spring/controller/utils/UserUtils.java:	public void setLoggedUser(HttpSession session, MyUser user);
+main/java/com/dub/spring/controller/utils/UserUtils.java:	public MyUser reload(HttpSession session);
+main/java/com/dub/spring/controller/payments/PaymentController.java:import javax.servlet.http.HttpSession;
+main/java/com/dub/spring/controller/payments/PaymentController.java:			HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/reviews/ReviewController.java:import javax.servlet.http.HttpSession;
+main/java/com/dub/spring/controller/reviews/ReviewController.java:		HttpSession session = request.getSession();
+main/java/com/dub/spring/controller/reviews/ReviewController.java:		HttpSession session = request.getSession();
+main/java/com/dub/spring/security/SpringSecurityConfiguration.java:                    .invalidateHttpSession(true).deleteCookies("JSESSIONID")

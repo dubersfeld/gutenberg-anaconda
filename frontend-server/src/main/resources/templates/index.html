@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" 
+		xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/header::header(title='home')">
+</head>
+
+<body>
+            
+	<h1>
+    	<span th:text="'Welcome ' + ${username}"></span>
+  	</h1>
+
+    <br /><br />
+    <a th:href="@{/getProfile}" th:text="'Your Profile'"></a>
+  	
+  	<br /><br />
+  	<a th:href="@{/logout}" th:text="'Sign Out'"></a>
+    <br /><br />
+    
+	<h2 th:text="'All book categories'"></h2>
+        
+    <table>
+        <tr th:each="category : ${categories}">
+          <td>
+        	<a th:href="@{'/categories/' + ${category.slug}}" th:text="${category.name}">name</a>
+       	  </td>        	
+        </tr>
+    </table>
+    
+    <br /><br />
+    <a th:href="@{/getCart}" th:text="'Your Cart'"></a>
+	  
+	<br /><br />
+	  
+	<div th:if="${not #lists.isEmpty(booksToReview)}">
+	  <p th:text="'Dear ' + ${username}"></p>
+	  <p th:text="'You have recently bought these books. Would you like to write a review?'"></p>
+	  <table>
+	  <tr th:each="book : ${booksToReview}">
+	    <td>
+	      <a th:href="@{/createReview/} + ${book.slug}" th:text="${book.title}"></a>
+	    </td>
+	  </tr>
+	  </table>
+	</div>  
+	     
+    <br /><br />
+    <div th:replace="fragments/footer::footer"></div>
+    
+</body>
+</html>
